@@ -1,0 +1,20 @@
+from kafka import KafkaConsumer
+import json
+
+# Set up the Kafka consumer
+consumer = KafkaConsumer(
+    'example-topic',
+    bootstrap_servers='localhost:9092',
+    auto_offset_reset='earliest',
+    enable_auto_commit=True,
+    group_id='example-group',
+    value_serializer=lambda v: json.loads(v.decode('utf-8'))
+)
+
+# Consume data from Kafka
+for message in consumer:
+    data = message.value
+    print(f'Received: {data}')
+
+# Close the consumer
+consumer.close()
